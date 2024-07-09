@@ -1,0 +1,34 @@
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background-color: #fff;
+  margin: 16px 22px;
+}
+
+.title {
+  font-size: 18px;
+}
+
+.headerAuth {
+  display: flex;
+  gap: 20px;
+}
+
+.btnSignIn {
+  font-size: 18px;
+  padding: 10px 14px;
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.btnSignUp {
+  color: #52c41a;
+  font-size: 18px;
+  padding: 10px 14px;
+  background-color: #fff;
+  border: 1px solid #52c41a;
+  border-radius: 5px;
+  cursor: pointer;
+}
