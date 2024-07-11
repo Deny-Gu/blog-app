@@ -1,9 +1,16 @@
 header {
+  width: 100%;
+  background-color: #fff;
+  padding: 10px 0;
+}
+
+.headerWrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  background-color: #fff;
-  margin: 16px 22px;
 }
 
 .title {

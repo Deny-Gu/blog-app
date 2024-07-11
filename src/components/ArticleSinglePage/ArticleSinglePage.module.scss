@@ -1,12 +1,16 @@
-.article {
-  width: 900px;
-  height: 140px;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
+.articleSinglePageWrapper {
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0px 4px 12px 0px #00000026;
+  margin: 20px;
+  width: 900px;
+  min-height: 85vh;
+}
+
+.article {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
 
   &LeftBlock {
     width: 75%;
@@ -65,5 +69,9 @@
   &Username {
     align-self: center;
     margin-right: 8px;
+  }
+
+  &Body {
+    padding: 0 15px 15px 15px;
   }
 }
