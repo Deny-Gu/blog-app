@@ -1,24 +1,46 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './ArticleItem.module.scss';
-import heart from '../../assets/icon/heart.svg';
+import heartSvg from '../../assets/icon/heart.svg';
+import heartActiveSvg from '../../assets/icon/heart-active.svg';
 import { Article } from '../../types/Article';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { useAppDispatch } from '../../store/hooks';
+import { favoriteArticle, unfavoriteArticle } from '../../store/services/articlesAPI';
+import { useAuth } from '../AuthProvider/AuthProvider';
 
 const ArticleItem: React.FC<Article> = ({
   slug,
   title,
   description,
   tagList,
+  favorited,
   favoritesCount,
   author,
   updatedAt,
 }) => {
+  const [heartActive, setHeartActive] = useState(favorited);
+  const [count, setCount] = useState(favoritesCount);
+  const { isAuth } = useAuth();
+  const dispatch = useAppDispatch();
+
   const shortenText = (str: string, maxLen: number, separator = ' ') => {
     if (str.length <= maxLen) {
       return str;
     }
     return str.substr(0, str.lastIndexOf(separator, maxLen)) + ' ...';
+  };
+
+  const handleFavorite = () => {
+    dispatch(favoriteArticle(slug));
+    setHeartActive(true);
+    setCount((prevState) => prevState + 1);
+  };
+
+  const handleUnfavorite = () => {
+    dispatch(unfavoriteArticle(slug));
+    setHeartActive(false);
+    setCount((prevState) => prevState - 1);
   };
 
   return (
@@ -29,8 +51,15 @@ const ArticleItem: React.FC<Article> = ({
             <Link to={`/articles/${slug}`}>{shortenText(title, 60)}</Link>
           </span>
           <span className={styles.articleLikes}>
-            <img className={styles.articleLikesImg} src={heart} alt="avatar" />
-            {favoritesCount}
+            <button className={styles.articleBtnLike} disabled={!isAuth && true}>
+              <img
+                className={styles.articleLikesImg}
+                onClick={favorited ? handleUnfavorite : handleFavorite}
+                src={heartActive ? heartActiveSvg : heartSvg}
+                alt="like"
+              />
+            </button>
+            {count}
           </span>
         </div>
         <div className={styles.articleTags}>
@@ -49,7 +78,7 @@ const ArticleItem: React.FC<Article> = ({
             <span>{format(updatedAt, 'PP')}</span>
           </div>
           <div className={styles.articleUserAvatar}>
-            <img className={styles.articleLikesImg} src={author.image} alt="like" />
+            <img className={styles.articleAvatarImg} src={author.image} alt="avatar" />
           </div>
         </div>
       </div>

@@ -4,20 +4,22 @@ import { Pagination } from 'antd';
 import styles from './ArticlesListPage.module.scss';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { useState, useEffect } from 'react';
-import { fetchArticles } from '../../store/asyncActions/articles';
+import { fetchArticles } from '../../store/services/articlesAPI';
 import Loader from '../Loader/Loader';
 import ErrorBlock from '../ErrorBlock/ErrorBlock';
 
 const ArticleList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const [pagination, setPagination] = useState(1);
+  const [pagination, setPagination] = useState<number>(1);
   const { articles, articlesCount, isLoading, error } = useAppSelector((state) => state.articles);
+  const user = useAppSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(fetchArticles(pagination * 5 - 5));
-  }, [dispatch, pagination]);
+  }, [pagination, user]);
 
-  const articleItems = articles.map((item) => <ArticleItem key={item.slug} {...item} />);
+  const articleItems =
+    articles && articles.map((item) => <ArticleItem key={item.slug} {...item} />);
 
   if (isLoading) {
     return <Loader />;

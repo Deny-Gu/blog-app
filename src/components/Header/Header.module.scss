@@ -5,9 +5,8 @@ header {
 }
 
 .headerWrapper {
-  max-width: 1440px;
+  width: 900px;
   margin: 0 auto;
-  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -20,6 +19,7 @@ header {
 .headerAuth {
   display: flex;
   gap: 20px;
+  align-items: center;
 }
 
 .btnSignIn {
@@ -38,4 +38,35 @@ header {
   border: 1px solid #52c41a;
   border-radius: 5px;
   cursor: pointer;
+}
+
+.btnCreateArticle {
+  color: #52c41a;
+  font-size: 14px;
+  padding: 5px 14px;
+  background-color: #fff;
+  border: 1px solid #52c41a;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btnLogOut {
+  font-size: 18px;
+  padding: 10px 14px;
+  background-color: #fff;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.userProfile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.userAvatar {
+  max-width: 46px;
+  max-height: 46px;
 }

@@ -1,4 +1,4 @@
-.signUpWrapper {
+.editProfileWrapper {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -20,7 +20,8 @@
     0px 22px 106px 0px #00000012;
 }
 
-.signUpForm {
+.editProfileForm {
+  width: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -90,7 +91,7 @@
   }
 }
 
-.signIn {
+.editProfileSave {
   color: #8c8c8c;
   font-size: 12px;
   font-weight: 400;

@@ -1,18 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './SignUpPage.module.scss';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { regUser } from '../../store/services/userAPI';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { message } from 'antd';
+import { useEffect } from 'react';
+import { clearError, clearSuccess } from '../../store/slices/userSlice';
+import { useAuth } from '../AuthProvider/AuthProvider';
+import { ISignUpForm } from '../../types/ISignUpForm';
 
-interface SignUpForm {
-  username: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  checkbox: boolean;
-}
-
-const schema: yup.ObjectSchema<SignUpForm> = yup
+const schema: yup.ObjectSchema<ISignUpForm> = yup
   .object({
     username: yup
       .string()
@@ -41,73 +40,118 @@ const schema: yup.ObjectSchema<SignUpForm> = yup
   .required();
 
 const SignUpPage: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { success, isLoading, error } = useAppSelector((state) => state.user);
+  const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
+  const { isAuth } = useAuth();
+
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
+  const successModal = async () => {
+    await messageApi.open({
+      type: 'success',
+      content: `You have successfully registered. Log in to the system.`,
+    });
+    dispatch(clearSuccess());
+    navigate('/sign-in');
+  };
+
+  const errorModal = async () => {
+    await messageApi.open({
+      type: 'error',
+      content: error?.message,
+    });
+    dispatch(clearError());
+  };
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/');
+    }
+    if (success) {
+      successModal();
+      reset();
+    }
+    if (error) {
+      errorModal();
+    }
+  }, [isAuth, success, error]);
+
   return (
-    <div className={styles.signUpWrapper}>
-      <form className={styles.signUpForm} onSubmit={handleSubmit((data) => console.log(data))}>
-        <h3>Create new account</h3>
-        <span>
-          <label htmlFor="username">Username</label>
-          <input
-            className={errors.username ? styles.error : null}
-            type="text"
-            id="username"
-            placeholder="Username"
-            {...register('username')}
-          />
-          {errors.username && <p>{errors.username.message}</p>}
-        </span>
-        <span>
-          <label htmlFor="email">Email address</label>
-          <input
-            className={errors.email ? styles.error : null}
-            id="email"
-            placeholder="Email address"
-            {...register('email')}
-          />
-          {errors.email && <p>{errors.email.message}</p>}
-        </span>
-        <span>
-          <label htmlFor="password">Password</label>
-          <input
-            className={errors.password ? styles.error : null}
-            type="password"
-            id="password"
-            placeholder="Password"
-            {...register('password')}
-          />
-          {errors.password && <p>{errors.password.message}</p>}
-        </span>
-        <span>
-          <label htmlFor="confirmPassword">Repeat password</label>
-          <input
-            className={errors.confirmPassword ? styles.error : null}
-            type="password"
-            id="confirmPassword"
-            placeholder="Password"
-            {...register('confirmPassword')}
-          />
-          {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
-        </span>
-        <div className={styles.personInfo}>
-          <input type="checkbox" {...register('checkbox')} />
-          <label>I agree to the processing of my personal information</label>
-        </div>
-        <span>{errors.checkbox && <p>{errors.checkbox.message}</p>}</span>
-        <span className={styles.signIn}>
-          <input type="submit" value="Create" />
-          Already have an account?
-          <Link to="/sign-in"> Sign In</Link>.
-        </span>
-      </form>
-    </div>
+    <>
+      {contextHolder}
+      <div className={styles.signUpWrapper}>
+        <form
+          className={styles.signUpForm}
+          onSubmit={handleSubmit((data) => dispatch(regUser(data)))}
+        >
+          <h3>Create new account</h3>
+          <span>
+            <label htmlFor="username">Username</label>
+            <input
+              className={
+                errors.username || error?.fields?.includes('username') ? styles.error : null
+              }
+              type="text"
+              id="username"
+              placeholder="Username"
+              {...register('username')}
+            />
+            {errors.username && <p>{errors.username.message}</p>}
+          </span>
+          <span>
+            <label htmlFor="email">Email address</label>
+            <input
+              className={errors.email || error?.fields?.includes('email') ? styles.error : null}
+              id="email"
+              placeholder="Email address"
+              {...register('email')}
+            />
+            {errors.email && <p>{errors.email.message}</p>}
+          </span>
+          <span>
+            <label htmlFor="password">Password</label>
+            <input
+              className={errors.password ? styles.error : null}
+              type="password"
+              id="password"
+              placeholder="Password"
+              {...register('password')}
+            />
+            {errors.password && <p>{errors.password.message}</p>}
+          </span>
+          <span>
+            <label htmlFor="confirmPassword">Repeat password</label>
+            <input
+              className={errors.confirmPassword ? styles.error : null}
+              type="password"
+              id="confirmPassword"
+              placeholder="Password"
+              {...register('confirmPassword')}
+            />
+            {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+          </span>
+          <div className={styles.personInfo}>
+            <input type="checkbox" {...register('checkbox')} />
+            <label>I agree to the processing of my personal information</label>
+          </div>
+          <span>{errors.checkbox && <p>{errors.checkbox.message}</p>}</span>
+          <span className={styles.signIn}>
+            <input type="submit" value={isLoading ? 'Загрузка...' : 'Create'} />
+            Already have an account?
+            <Link to="/sign-in"> Sign In</Link>.
+          </span>
+        </form>
+      </div>
+    </>
   );
 };
 

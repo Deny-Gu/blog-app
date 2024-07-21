@@ -28,12 +28,25 @@
   }
 
   &Likes {
+    display: inline-flex;
+    align-items: baseline;
     font-size: 12px;
     margin-left: 10px;
 
     &Img {
       margin-right: 5px;
       vertical-align: top;
+    }
+  }
+
+  &BtnLike {
+    cursor: pointer;
+    background-color: unset;
+    border: none;
+    width: auto;
+
+    &:disabled {
+      cursor: not-allowed;
     }
   }
 
@@ -59,10 +72,18 @@
   &UserInformation {
     display: flex;
     align-items: baseline;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 20px 0;
 
     span {
       font-size: 12px;
       color: #00000080;
+    }
+
+    img {
+      width: 46px;
+      height: 46px;
     }
   }
 
@@ -74,4 +95,36 @@
   &Body {
     padding: 0 15px 15px 15px;
   }
+
+  &Edit {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+    justify-content: end;
+  }
+}
+
+button.btnDelete {
+  width: 80px;
+  height: 30px;
+  background-color: #fff;
+  border: 1px solid #f5222d;
+  border-radius: 4px;
+  cursor: pointer;
+
+  span {
+    color: #f5222d;
+    font-size: 14px;
+  }
+}
+
+button.btnEdit {
+  width: 80px;
+  height: 30px;
+  color: #52c41a;
+  font-size: 14px;
+  background-color: #fff;
+  border: 1px solid #52c41a;
+  border-radius: 4px;
+  cursor: pointer;
 }

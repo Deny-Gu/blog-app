@@ -33,6 +33,17 @@
     }
   }
 
+  &BtnLike {
+    cursor: pointer;
+    background-color: unset;
+    border: none;
+    width: auto;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
   &Tags {
     display: flex;
     gap: 8px;
@@ -65,5 +76,10 @@
   &Username {
     align-self: center;
     margin-right: 8px;
+  }
+
+  &AvatarImg {
+    max-width: 46px;
+    max-height: 46px;
   }
 }

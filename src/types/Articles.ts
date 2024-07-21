@@ -1,6 +1,6 @@
 import { Article } from './Article';
 
-export type ArticlesSucces = {
+export type ArticlesSuccess = {
   articles: Article[];
   articlesCount: number;
 };
