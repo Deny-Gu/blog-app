@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User } from '../../types/User';
-import { IRejectValue } from '../../types/IRejectValue';
 import { editProfileUser, getUser, logUser, regUser } from '../services/userAPI';
+import { IErrorUser } from '../../types/IErrorUser';
 
 type State = {
   user: User | null;
   isLoading: boolean;
   userToken: string | null;
-  error: null | undefined | IRejectValue;
+  error: null | undefined | IErrorUser;
   success: boolean;
 };
 
@@ -101,7 +101,6 @@ const userSlice = createSlice({
       .addCase(editProfileUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
-        state.user = null;
       });
   },
 });

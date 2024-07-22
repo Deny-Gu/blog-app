@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { PropsEditProfileUser, PropsLogUser, PropsRegUser, responseUser } from '../../types/User';
 import axios from 'axios';
-import { IRejectValue } from '../../types/IRejectValue';
+import { IErrorUser } from '../../types/IErrorUser';
 
 const apiUrl = 'https://api.realworld.io/api';
 
-export const getUser = createAsyncThunk<responseUser, string, { rejectValue: IRejectValue }>(
+export const getUser = createAsyncThunk<responseUser, string, { rejectValue: IErrorUser }>(
   'user/getUser',
   async function (token: string, { rejectWithValue }) {
     try {
@@ -23,15 +23,19 @@ export const getUser = createAsyncThunk<responseUser, string, { rejectValue: IRe
           if (error.response.status === 422) {
             const keys = Object.keys(error.response.data.errors).join(' and ');
             const obj = {
-              message: `${keys} is already in use.`,
-              fields: Object.keys(error.response.data.errors),
+              getUser: {
+                message: `${keys} is already in use.`,
+                fields: Object.keys(error.response.data.errors),
+              },
             };
             return rejectWithValue(obj);
           }
         }
         if (error.message) {
           const obj = {
-            message: error.message,
+            getUser: {
+              message: error.message,
+            },
           };
           return rejectWithValue(obj);
         }
@@ -40,7 +44,7 @@ export const getUser = createAsyncThunk<responseUser, string, { rejectValue: IRe
   }
 );
 
-export const logUser = createAsyncThunk<responseUser, PropsLogUser, { rejectValue: IRejectValue }>(
+export const logUser = createAsyncThunk<responseUser, PropsLogUser, { rejectValue: IErrorUser }>(
   'user/logUser',
   async function (user: PropsLogUser, { rejectWithValue }) {
     try {
@@ -61,15 +65,19 @@ export const logUser = createAsyncThunk<responseUser, PropsLogUser, { rejectValu
           if (error.response.status === 403) {
             const keys = Object.keys(error.response.data.errors).join(' and ');
             const obj = {
-              message: `${keys} is already in use.`,
-              fields: Object.keys(error.response.data.errors),
+              logUser: {
+                message: `${keys} is already in use.`,
+                fields: Object.keys(error.response.data.errors),
+              },
             };
             return rejectWithValue(obj);
           }
         }
         if (error.message) {
           const obj = {
-            message: error.message,
+            logUser: {
+              message: error.message,
+            },
           };
           return rejectWithValue(obj);
         }
@@ -78,7 +86,7 @@ export const logUser = createAsyncThunk<responseUser, PropsLogUser, { rejectValu
   }
 );
 
-export const regUser = createAsyncThunk<responseUser, PropsRegUser, { rejectValue: IRejectValue }>(
+export const regUser = createAsyncThunk<responseUser, PropsRegUser, { rejectValue: IErrorUser }>(
   'user/regUser',
   async function (user: PropsRegUser, { rejectWithValue }) {
     try {
@@ -99,15 +107,19 @@ export const regUser = createAsyncThunk<responseUser, PropsRegUser, { rejectValu
           if (error.response.status === 422) {
             const keys = Object.keys(error.response.data.errors).join(' and ');
             const obj = {
-              message: `${keys} is already in use.`,
-              fields: Object.keys(error.response.data.errors),
+              regUser: {
+                message: `${keys} is already in use.`,
+                fields: Object.keys(error.response.data.errors),
+              },
             };
             return rejectWithValue(obj);
           }
         }
         if (error.message) {
           const obj = {
-            message: error.message,
+            regUser: {
+              message: error.message,
+            },
           };
           return rejectWithValue(obj);
         }
@@ -119,7 +131,7 @@ export const regUser = createAsyncThunk<responseUser, PropsRegUser, { rejectValu
 export const editProfileUser = createAsyncThunk<
   responseUser,
   PropsEditProfileUser,
-  { rejectValue: IRejectValue }
+  { rejectValue: IErrorUser }
 >('user/editProfileUser', async function (user: PropsEditProfileUser, { rejectWithValue }) {
   try {
     const { token, username, email, password, image } = user;
@@ -148,15 +160,27 @@ export const editProfileUser = createAsyncThunk<
         if (error.response.status === 422) {
           const keys = Object.keys(error.response.data.errors).join(' and ');
           const obj = {
-            message: `${keys} is already in use.`,
-            fields: Object.keys(error.response.data.errors),
+            editProfileUser: {
+              message: `${keys} is already in use.`,
+              fields: Object.keys(error.response.data.errors),
+            },
+          };
+          return rejectWithValue(obj);
+        }
+        if (error.response.status === 500) {
+          const obj = {
+            editProfileUser: {
+              message: error.response.data,
+            },
           };
           return rejectWithValue(obj);
         }
       }
       if (error.message) {
         const obj = {
-          message: error.message,
+          editProfileUser: {
+            message: error.message,
+          },
         };
         return rejectWithValue(obj);
       }

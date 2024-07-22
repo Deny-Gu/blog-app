@@ -48,7 +48,7 @@ const ArticleItem: React.FC<Article> = ({
       <div className={styles.articleLeftBlock}>
         <div className={styles.articleLeftBlockHeader}>
           <span className={styles.articleTitle}>
-            <Link to={`/articles/${slug}`}>{shortenText(title, 60)}</Link>
+            <Link to={`/articles/${slug}`}>{shortenText(title, 56)}</Link>
           </span>
           <span className={styles.articleLikes}>
             <button className={styles.articleBtnLike} disabled={!isAuth && true}>
@@ -68,7 +68,7 @@ const ArticleItem: React.FC<Article> = ({
           ))}
         </div>
         <div className={styles.articleDescription}>
-          <p>{description}</p>
+          <p>{shortenText(description, 300)}</p>
         </div>
       </div>
       <div className={styles.articleRightBlock}>

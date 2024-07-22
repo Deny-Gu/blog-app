@@ -28,7 +28,7 @@ const schema: yup.ObjectSchema<IEditProfileForm> = yup
       .max(40, 'Password is too short - should be 40 chars maximum.'),
     image: yup
       .string()
-      .matches(/(https?:\/\/.*\.(?:png|jpg))/i, 'Invalid url.')
+      .matches(/(https?:\/\/.*\.(?:png|jpg|jpeg|gif))/i, 'Invalid url.')
       .min(0),
   })
   .required();
@@ -46,10 +46,10 @@ const EditProfilePage: React.FC = () => {
     });
   };
 
-  const errorModal = () => {
-    messageApi.open({
+  const errorModal = async () => {
+    await messageApi.open({
       type: 'error',
-      content: 'Edit profile error.',
+      content: error?.editProfileUser?.message,
     });
   };
 
@@ -66,13 +66,19 @@ const EditProfilePage: React.FC = () => {
   };
 
   useEffect(() => {
+    return () => {
+      dispatch(clearSuccess());
+      dispatch(clearError());
+    };
+  }, []);
+
+  useEffect(() => {
     if (success) {
       successModal();
       dispatch(clearSuccess());
     }
-    if (error) {
+    if (error?.editProfileUser) {
       errorModal();
-      dispatch(clearError());
     }
   }, [success, error]);
 
@@ -88,7 +94,11 @@ const EditProfilePage: React.FC = () => {
           <span>
             <label htmlFor="username">Username</label>
             <input
-              className={errors.username ? styles.error : null}
+              className={
+                errors.username || error?.editProfileUser?.message.includes('username')
+                  ? styles.error
+                  : null
+              }
               type="text"
               id="username"
               placeholder="Username"
@@ -96,17 +106,27 @@ const EditProfilePage: React.FC = () => {
               {...register('username')}
             />
             {errors.username && <p>{errors.username.message}</p>}
+            {error?.editProfileUser?.message.includes('username') && (
+              <p>{'This username is already in use.'}</p>
+            )}
           </span>
           <span>
             <label htmlFor="email">Email address</label>
             <input
-              className={errors.email ? styles.error : null}
+              className={
+                errors.email || error?.editProfileUser?.message.includes('email')
+                  ? styles.error
+                  : null
+              }
               id="email"
               placeholder="Email address"
               defaultValue={user?.email}
               {...register('email')}
             />
             {errors.email && <p>{errors.email.message}</p>}
+            {error?.editProfileUser?.message.includes('email') && (
+              <p>{'This email is already in use.'}</p>
+            )}
           </span>
           <span>
             <label htmlFor="password">New password</label>

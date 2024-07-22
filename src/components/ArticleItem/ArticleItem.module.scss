@@ -1,5 +1,5 @@
 .article {
-  width: 900px;
+  width: 880px;
   height: 140px;
   padding: 15px;
   display: flex;
@@ -59,7 +59,8 @@
 
   &Description {
     font-size: 12px;
-    line-height: 22px;
+    line-height: 20px;
+    line-break: anywhere;
     margin-top: 5px;
   }
 

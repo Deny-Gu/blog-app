@@ -2,9 +2,8 @@
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0px 4px 12px 0px #00000026;
-  margin: 20px;
-  width: 900px;
-  min-height: 85vh;
+  margin: 20px 10px;
+  width: 880px;
 }
 
 .article {
@@ -65,7 +64,8 @@
 
   &Description {
     font-size: 12px;
-    line-height: 22px;
+    line-height: 20px;
+    line-break: anywhere;
     margin-top: 5px;
   }
 

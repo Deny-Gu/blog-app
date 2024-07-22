@@ -60,17 +60,22 @@ const SignUpPage: React.FC = () => {
       type: 'success',
       content: `You have successfully registered. Log in to the system.`,
     });
-    dispatch(clearSuccess());
     navigate('/sign-in');
   };
 
   const errorModal = async () => {
     await messageApi.open({
       type: 'error',
-      content: error?.message,
+      content: error?.regUser?.message,
     });
-    dispatch(clearError());
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+      dispatch(clearSuccess());
+    };
+  }, []);
 
   useEffect(() => {
     if (isAuth) {
@@ -80,7 +85,7 @@ const SignUpPage: React.FC = () => {
       successModal();
       reset();
     }
-    if (error) {
+    if (error?.regUser) {
       errorModal();
     }
   }, [isAuth, success, error]);
@@ -98,7 +103,9 @@ const SignUpPage: React.FC = () => {
             <label htmlFor="username">Username</label>
             <input
               className={
-                errors.username || error?.fields?.includes('username') ? styles.error : null
+                errors.username || error?.regUser?.fields?.includes('username')
+                  ? styles.error
+                  : null
               }
               type="text"
               id="username"
@@ -110,7 +117,9 @@ const SignUpPage: React.FC = () => {
           <span>
             <label htmlFor="email">Email address</label>
             <input
-              className={errors.email || error?.fields?.includes('email') ? styles.error : null}
+              className={
+                errors.email || error?.regUser?.fields?.includes('email') ? styles.error : null
+              }
               id="email"
               placeholder="Email address"
               {...register('email')}

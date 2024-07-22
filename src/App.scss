@@ -29,17 +29,15 @@ html {
 }
 
 body {
+  min-width: 900px;
   background-color: #ebeef3;
 }
 
 main {
-  max-width: 1440px;
+  position: relative;
+  min-height: 90vh;
+  max-width: 900px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
 }
 
 a {

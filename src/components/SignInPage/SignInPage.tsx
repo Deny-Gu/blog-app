@@ -28,9 +28,8 @@ const SignInPage: React.FC = () => {
   const errorModal = async () => {
     await messageApi.open({
       type: 'error',
-      content: error?.message,
+      content: error?.logUser?.message,
     });
-    dispatch(clearError());
   };
 
   const {
@@ -46,6 +45,13 @@ const SignInPage: React.FC = () => {
   };
 
   useEffect(() => {
+    return () => {
+      dispatch(clearError());
+      dispatch(clearSuccess());
+    };
+  }, []);
+
+  useEffect(() => {
     if (isAuth) {
       navigate('/', { replace: true });
     }
@@ -54,7 +60,7 @@ const SignInPage: React.FC = () => {
       dispatch(clearSuccess());
       navigate('/', { replace: true });
     }
-    if (error) {
+    if (error?.logUser) {
       errorModal();
     }
   }, [isAuth, error, user]);
@@ -72,7 +78,9 @@ const SignInPage: React.FC = () => {
             <label htmlFor="email">Email address</label>
             <input
               className={
-                errors.email || error?.fields?.includes('email or password') ? styles.error : null
+                errors.email || error?.logUser?.fields?.includes('email or password')
+                  ? styles.error
+                  : null
               }
               id="email"
               placeholder="Email address"
@@ -84,7 +92,7 @@ const SignInPage: React.FC = () => {
             <label htmlFor="password">Password</label>
             <input
               className={
-                errors.password || error?.fields?.includes('email or password')
+                errors.password || error?.logUser?.fields?.includes('email or password')
                   ? styles.error
                   : null
               }
