@@ -11,13 +11,13 @@ import ArticleCreatePage from './components/ArticleCreatePage/ArticleCreatePage'
 import { AuthProvider } from './components/AuthProvider/AuthProvider';
 import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
 import ArticleEditPage from './components/ArticleEditPage/ArticleEditPage';
-import ErrorBlock from './components/ErrorBlock/ErrorBlock';
+import NotFoundPage from './components/NotFoundPage/NotFoundPage';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <LayoutRoute />,
-    errorElement: <ErrorBlock />,
+    errorElement: <NotFoundPage />,
     children: [
       {
         index: true,

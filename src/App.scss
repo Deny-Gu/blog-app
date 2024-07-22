@@ -58,4 +58,12 @@ a {
   right: 25%;
   text-align: center;
   font-size: 30px;
+
+  a {
+    text-decoration: underline;
+
+    &:hover {
+      color: #838383;
+    }
+  }
 }
